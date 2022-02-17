@@ -26,7 +26,7 @@ export default class Carousel {
               <img src="/assets/images/icons/plus-icon.svg" alt="icon">
             </button>
           </div>
-        </div>`)
+        </div>`).join('')
       }
     </div>
    `);
@@ -36,50 +36,49 @@ export default class Carousel {
     const rightButton = carouselSlider.querySelector('.carousel__arrow_right');
     const leftButton = carouselSlider.querySelector('.carousel__arrow_left');
     const slidesBlock = carouselSlider.querySelector('.carousel__inner');
-    const image = carouselSlider.querySelectorAll('.carousel__img');
+    const allImages = carouselSlider.querySelectorAll('.carousel__img');
+    const image = carouselSlider.querySelector('.carousel__img');
 
-    for (let i = 0; i < image.length; i++) {
-      let positionCount = 0;
-      let translateCount = 0;
-      leftButton.style.display = 'none';
+    let positionCount = 0;
+    let translateCount = 0;
+    leftButton.style.display = 'none';
 
-      rightButton.addEventListener('click', () => {
-        positionCount += 1;
-        translateCount += -slidesBlock.offsetWidth;
-        rightButton.style.display = '';
-        leftButton.style.display = '';
+    rightButton.addEventListener('click', () => {
+      positionCount += 1;
+      translateCount += -slidesBlock.offsetWidth;
+      rightButton.style.display = '';
+      leftButton.style.display = '';
 
-        if (positionCount === (image.length - 1)) {
-          rightButton.style.display = 'none';
-        }
+      if (positionCount === (allImages.length - 1)) {
+        rightButton.style.display = 'none';
+      }
 
-        slidesBlock.style.transform = `translateX(${translateCount}px)`;
-      });
+      slidesBlock.style.transform = `translateX(${translateCount}px)`;
+    });
 
-      leftButton.addEventListener('click', () => {
-        positionCount -= 1;
-        translateCount += image[i].offsetWidth;
-        rightButton.style.display = '';
-        leftButton.style.display = '';
+    leftButton.addEventListener('click', () => {
+      positionCount -= 1;
+      translateCount += image.offsetWidth;
+      rightButton.style.display = '';
+      leftButton.style.display = '';
 
-        if (positionCount === 0) {
-          leftButton.style.display = 'none';
-        }
+      if (positionCount === 0) {
+        leftButton.style.display = 'none';
+      }
 
-        slidesBlock.style.transform = `translateX(${translateCount}px)`;
+      slidesBlock.style.transform = `translateX(${translateCount}px)`;
+    });
+
+
+    let carouselButton = carouselSlider.querySelectorAll('.carousel__button');
+    for (let i = 0; i < carouselButton.length; i++) {
+      carouselButton[i].addEventListener('click', () => {
+        carouselButton[i].dispatchEvent(new CustomEvent('product-add', {
+          detail: slides[i].id,
+          bubbles: true
+        })
+        );
       });
     }
-
-    slides.map(slide => {
-      const carouselButton = carouselSlider.querySelector('.carousel__button');
-
-      carouselButton.addEventListener('click', () => {
-      carouselButton.dispatchEvent(new CustomEvent('product-add', {
-        detail: slide.id,
-        bubbles: true
-      })
-      );
-    });
-    });
   }
 }
